@@ -1,40 +1,23 @@
 <html>
 <head>
-	<title>Issue Tracking System</title>
+	<title>CSIRT Database</title>
 </head>
 <body>
-	<h1> New Incidents </h1>
-	<a href="testing.php">Home</a>
+	<h1> CSIRT Database </h1>
+	<a href="pageSourceCode.php">Home</a>
 	<!--ADD A NEW INCIDENT CODE-->
 	<form>
-	<h4>Add New Incident</h4> 
+	<h4>Add New Indient</h4> 
 	
 	<!--Text boxes to fill out-->
 	Incident Number: <br>
 	<input type = "text" name = "NUM" multiple><br>
 	
-	Category: <br>
-	<select name = "CAT">
-        <option value="cat1">Category1</option>
-        <option value="cat2">Category2</option>
-    </select><br>
-        
-    Status of Incident (Optional): <br>
-	<select name = "STATUS">
-        <option value="status1">Status1</option>
-        <option value="status2">Status2</option>
-    </select><br><br>
+	Type Of Incident: <br>
+	<input type = "text" name = "TYPE" multiple><br>
 	
 	Date Of Incident (format: YYYY-MM-DD): <br>
 	<input type = "text" name = "DATE" multiple><br>
-        
-    Date Resolved(Optional) (format: YYYY-MM-DD): <br>
-	<input type = "text" name = "RESOLVED" multiple><br>
-        
-    User: <br>
-    <input type = "text" name = "USER" multiple> <br>
-        
-    Enter up to three tags
 	
 	<input type = "submit">
 	</form>
