@@ -32,13 +32,27 @@
 	<input type = "text" name = "RESOLVED" multiple><br>
         
     User: <br>
-    <input type = "text" name = "USER" multiple> <br>
+    <input type = "text" name = "USER" multiple> <br><br>
         
-    Enter up to three tags
+    Enter up to three tags: <br>
+    <input type = "text" name = "TAG1" multiple> <br>
+    <input type = "text" name = "TAG2" multiple> <br>
+    <input type = "text" name = "TAG3" multiple> <br><br>
+        
+    Employee: <br>
+    <input type = "text" name = "EMPLOYEE" multiple> <br><br>
+        
+    Description of incident:<br>
+    <textarea name = "DESCRIPTION" rows="10" cols="50"></textarea> <br>
 	
+    <br>
 	<input type = "submit">
 	</form>
 	
+    <!--***TO DO: CHANGE PHP-->
+    
+    
+    
 	<?php
 		##Stores the variables from user inputs
 		if(isset($_REQUEST['NUM']))

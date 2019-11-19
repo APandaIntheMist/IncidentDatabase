@@ -1,4 +1,5 @@
 <html>
+    <!--http://compsci.adelphi.edu/~ryandeisler/IssueTrackingSystem/testing.php-->
 <head>
 	<title>Issue Tracking System</title>
 </head>
@@ -20,9 +21,7 @@
 	{
 		$num =  $_GET["incidentNum"];
 	
-        $pass = "xe6\$eqXh(L";
-        echo "Pass = " . $pass;
-		$db = pg_connect("host=localhost port=5432 dbname=f19gsefpg1 user=ryandeisler password=$pass");
+		$db = pg_connect("dbname=f19gsefpg1");
         
         $status = pg_connection_status($db);
         
@@ -34,11 +33,11 @@
         }
 		
 		#SQL FOR PRINTING INCIDENT TABLE
-		$sql1 = "SELECT * FROM `example` WHERE column1 = $num;";
+		$sql1 = "SELECT * FROM example where column1 = $num";
 		
 		
 		
-		#QUERIES THE DATABASE OBJECT FOR ALL FOUR TABLES
+		#QUERIES THE DATABASE OBJECT
 		$result = pg_query($db,$sql1);
 
 		
@@ -48,7 +47,7 @@
 			echo "Problem with getting int: " . $db->error;
 		}
 		#CASE WHERE INCIDENT DOES NOT EXIST
-		else if($result->num_rows == 0)
+		else if(pg_num_rows($result) == 0)
 		{
 			echo "No int found.";
 		}
@@ -58,7 +57,7 @@
 			echo "<table border = solid>";
 			echo "<caption>Incident</caption>";
 			echo "<th>Int</th>";
-			while($row = $result->fetch_assoc())
+			while($row = pg_fetch_row($result))
 			{
 				echo "<tr>";
 				foreach($row as $col)
