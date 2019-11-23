@@ -5,14 +5,13 @@
 </head>
 <body>
 	<h1>
-	Issue Tracking System
+	Search for Incident
 	</h1>
     <a href="newIncident.php">New Incidents</a>
     <a href="login.php">Login</a>
     <a href="openincidents.php">OpenList</a>
-	<a href="search.php">Search</a>
     <a href="logout.php">Logout</a>
-    
+	
 	<h4>Query the database:</h4>
 	<form>
 	Incident #: <br>
@@ -21,15 +20,6 @@
 	
 	<!--THIS PHP BLOCK PRINTS ALL FOUR TABLES-->
 	<?php
-    session_start();
-    
-    // Check if the user is logged in, if not then redirect him to login page
-    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
-    {
-        header("location: login.php");
-        exit;
-    }
-    
 	if(isset($_GET["incidentNum"]))
 	{
 		$num =  $_GET["incidentNum"];

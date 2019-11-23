@@ -5,6 +5,7 @@
 <body>
 	<h1> New Incidents </h1>
 	<a href="testing.php">Home</a>
+    <a href="logout.php">Logout</a>
 	<!--ADD A NEW INCIDENT CODE-->
 	<form>
 	<h4>Add New Incident</h4> 
@@ -15,8 +16,24 @@
 	
 	Category: <br>
 	<select name = "CAT">
-        <option value="cat1">Category1</option>
-        <option value="cat2">Category2</option>
+        <?php
+        $db = pg_connect("dbname=f19gsefpg1");
+        $sql = "SELECT * FROM categories;"
+        $result = pg_query($db,$sql);
+        
+        if (!$result)
+        {
+            echo "There was a problem getting categories: " . pg_last_error();
+        }
+        else
+        {
+            while($row = pg_fetch_row($result))
+            {
+                echo "<option value="$row">$row</option>";
+            }
+        }
+        pg_close($db);
+        ?>
     </select><br>
         
     Status of Incident (Optional): <br>
@@ -60,18 +77,43 @@
 			$NUM=$_REQUEST['NUM'];
 		}
 		
-		if(isset($_REQUEST['TYPE']))
+		if(isset($_REQUEST['CAT']))
 		{
-			$TYPE=$_REQUEST['TYPE'];
+			$TYPE=$_REQUEST['CAT'];
 		}
 		
 		if(isset($_REQUEST['DATE']))
 		{
 			$DATE=$_REQUEST['DATE'];
 		}
+    
+        if(isset($_REQUEST['RESOLVED']))
+		{
+			$RESOLVED=$_REQUEST['RESOLVED'];
+		}
+    
+        if(isset($_REQUEST['TAG1']))
+		{
+			$TAG1=$_REQUEST['TAG1'];
+		}
+    
+        if(isset($_REQUEST['TAG2']))
+		{
+			$TAG2=$_REQUEST['TAG2'];
+		}
+    
+        if(isset($_REQUEST['TAG3']))
+		{
+			$TAG3=$_REQUEST['TAG3'];
+		}
+    
+        if(isset($_REQUEST['EMPLOYEE']))
+		{
+			$EMPLOYEE=$_REQUEST['EMPLOYEE'];
+		}
 		
 		## adds the incident if filled out correctly, otherwise gives an error
-		if(isset($_REQUEST['NUM']) && isset($_REQUEST['TYPE']) &&isset($_REQUEST['DATE']))
+		if(isset($_REQUEST['NUM']) && isset($_REQUEST['CAT']) &&isset($_REQUEST['DATE']) &&isset($_REQUEST['RESOLVED']) &&isset($_REQUEST['TAG1']) &&isset($_REQUEST['TAG2']) &&isset($_REQUEST['TAG3']) &&isset($_REQUEST['EMPLOYEE']))
 		{ 
 			$db = new mysqli("127.0.0.1", "ryandeisler", "", "ryandeisler");
 			$sql = "INSERT INTO incident (incidentNumber, typeOfIncident, dateOfIncident, incidentState) VALUES ('$NUM', '$TYPE', '$DATE', 'open');";
