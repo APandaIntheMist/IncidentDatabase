@@ -16,9 +16,10 @@
 	
 	Category: <br>
 	<select name = "CAT">
+        <!--this php block lets the incident form get categories from the database-->
         <?php
         $db = pg_connect("dbname=f19gsefpg1");
-        $sql = "SELECT * FROM categories;"
+        $sql = "SELECT * FROM categories;";
         $result = pg_query($db,$sql);
         
         if (!$result)
@@ -27,9 +28,9 @@
         }
         else
         {
-            while($row = pg_fetch_row($result))
-            {
-                echo "<option value="$row">$row</option>";
+            $allCategories = pg_fetch_all_columns($result,0);
+            for ($i = 0, $size = count($allCategories); $i < $size; ++$i) {
+                echo "<option value='$allCategories[$i]'>$allCategories[$i]</option>";
             }
         }
         pg_close($db);
@@ -38,8 +39,8 @@
         
     Status of Incident (Optional): <br>
 	<select name = "STATUS">
-        <option value="status1">Status1</option>
-        <option value="status2">Status2</option>
+        <option value="open">Open</option>
+        <option value="closed">Closed</option>
     </select><br><br>
 	
 	Date Of Incident (format: YYYY-MM-DD): <br>
@@ -51,12 +52,12 @@
     User: <br>
     <input type = "text" name = "USER" multiple> <br><br>
         
-    Enter up to three tags: <br>
+    Enter three tags: <br>
     <input type = "text" name = "TAG1" multiple> <br>
     <input type = "text" name = "TAG2" multiple> <br>
     <input type = "text" name = "TAG3" multiple> <br><br>
         
-    Employee: <br>
+    Employee ID: <br>
     <input type = "text" name = "EMPLOYEE" multiple> <br><br>
         
     Description of incident:<br>
@@ -79,7 +80,12 @@
 		
 		if(isset($_REQUEST['CAT']))
 		{
-			$TYPE=$_REQUEST['CAT'];
+			$CAT=$_REQUEST['CAT'];
+		}
+    
+		if(isset($_REQUEST['STATUS']))
+		{
+			$STATUS=$_REQUEST['STATUS'];
 		}
 		
 		if(isset($_REQUEST['DATE']))
@@ -90,6 +96,11 @@
         if(isset($_REQUEST['RESOLVED']))
 		{
 			$RESOLVED=$_REQUEST['RESOLVED'];
+		}
+    
+        if(isset($_REQUEST['USER']))
+		{
+			$USER=$_REQUEST['USER'];
 		}
     
         if(isset($_REQUEST['TAG1']))
@@ -112,20 +123,29 @@
 			$EMPLOYEE=$_REQUEST['EMPLOYEE'];
 		}
 		
+        if(isset($_REQUEST['DESCRIPTION']))
+		{
+			$DESCRIPTION=$_REQUEST['DESCRIPTION'];
+		}
+    
 		## adds the incident if filled out correctly, otherwise gives an error
-		if(isset($_REQUEST['NUM']) && isset($_REQUEST['CAT']) &&isset($_REQUEST['DATE']) &&isset($_REQUEST['RESOLVED']) &&isset($_REQUEST['TAG1']) &&isset($_REQUEST['TAG2']) &&isset($_REQUEST['TAG3']) &&isset($_REQUEST['EMPLOYEE']))
+		if(isset($_REQUEST['NUM']) && isset($_REQUEST['CAT']) &&isset($_REQUEST['DATE']) && isset($_REQUEST['RESOLVED']) &&isset($_REQUEST['TAG1']) && isset($_REQUEST['TAG2']) &&isset($_REQUEST['TAG3']) && isset($_REQUEST['EMPLOYEE'])
+        &&isset($_REQUEST['DESCRIPTION']) && isset($_REQUEST['STATUS']))
 		{ 
-			$db = new mysqli("127.0.0.1", "ryandeisler", "", "ryandeisler");
-			$sql = "INSERT INTO incident (incidentNumber, typeOfIncident, dateOfIncident, incidentState) VALUES ('$NUM', '$TYPE', '$DATE', 'open');";
-			if ($db->query($sql) === TRUE)
+            
+            $TAGS = "\"" . $TAG1 . "\", " . "\"" . $TAG2 . "\", " . "\"" . $TAG3 . "\"";
+            
+			$db = pg_connect("dbname=f19gsefpg1");
+			$sql = "INSERT INTO incidents (incident_id, category, description, date_created, date_resolved, state, client, tags, employee_id, case_history) VALUES ('$NUM', '$CAT', '$DESCRIPTION', '$DATE', '$RESOLVED', '$STATUS', '$USER', '$TAGS', '$EMPLOYEE', 'ASK ABOUT CASE HISTORY');";
+			if (pg_query($db,$sql) != FALSE)
 			{
 				echo "New record created successfully";
 			} 
 			else 
 			{
-				echo "Error: " . $sql . "<br>" . $db->error;
+				echo "Error: " . $sql . "<br>" . pg_last_error($db);
 			}	
-			$db->close();
+			pg_close($db);
 		}
 	?>
 </body>
