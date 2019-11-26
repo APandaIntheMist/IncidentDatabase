@@ -9,6 +9,17 @@
 	<!--ADD A NEW INCIDENT CODE-->
 	<form>
 	<h4>Add New Incident</h4> 
+    
+    <?php
+        session_start();
+    
+        // Check if the user is logged in, if not then redirect him to login page
+        if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
+        {
+            header("location: login.php");
+            exit;
+        }
+    ?>
 	
 	<!--Text boxes to fill out-->
 	Incident Number: <br>
@@ -126,6 +137,7 @@
         if(isset($_REQUEST['DESCRIPTION']))
 		{
 			$DESCRIPTION=$_REQUEST['DESCRIPTION'];
+            //$DESCRIPTION = addslashes($DESCRIPTION);
 		}
     
 		## adds the incident if filled out correctly, otherwise gives an error

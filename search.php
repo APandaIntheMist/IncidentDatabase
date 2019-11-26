@@ -20,6 +20,15 @@
 	
 	<!--THIS PHP BLOCK PRINTS ALL FOUR TABLES-->
 	<?php
+    session_start();
+    
+    // Check if the user is logged in, if not then redirect him to login page
+    if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)
+    {
+        header("location: login.php");
+        exit;
+    }
+    
 	if(isset($_GET["incidentNum"]))
 	{
 		$num =  $_GET["incidentNum"];
@@ -36,7 +45,7 @@
         }
 		
 		#SQL FOR PRINTING INCIDENT TABLE
-		$sql1 = "SELECT * FROM example where column1 = $num";
+		$sql1 = "SELECT * FROM incidents where incident_id = $num";
 		
 		
 		
@@ -47,7 +56,7 @@
 		#CASE WHERE ERROR OCCURS
 		if(!$result)
 		{
-			echo "Problem with getting int: " . $db->error;
+			echo "Problem with getting int: " . pg_last_error($db);
 		}
 		#CASE WHERE INCIDENT DOES NOT EXIST
 		else if(pg_num_rows($result) == 0)
@@ -59,7 +68,7 @@
 		{
 			echo "<table border = solid>";
 			echo "<caption>Incident</caption>";
-			echo "<th>Int</th>";
+			echo "<th>Incident ID</th><th>Category</th><th>Description</th><th>Date Created</th><th>Date Resolved</th><th>State</th><th>Client</th><th>Tags</th><th>Employee ID</th><th>Case History</th>";
 			while($row = pg_fetch_row($result))
 			{
 				echo "<tr>";

@@ -4,6 +4,7 @@
     
     <head>
 	   <title>Issue Tracking System</title>
+       
     </head>
     <body>
 	   <h1>
@@ -15,7 +16,7 @@
             <input type=text name="USER" multiple>
         
             <h3>Password</h3>
-            <input type=text name="PASS" multiple><br><br>
+            <input type="password" id="PASS" name="PASS" multiple><br><br>
             <input type=submit>
         </form>
         
@@ -54,6 +55,6 @@
 
         
         ?>
-   
+   <script src="loginScript.js"></script>
     </body>
 </html>
