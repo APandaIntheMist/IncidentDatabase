@@ -37,12 +37,12 @@
         
         $status = pg_connection_status($db);
         
-        if ($status === PGSQL_CONNECTION_OK){
+        /*if ($status === PGSQL_CONNECTION_OK){
             echo "GOOD CONNECTION";
         }
         else{
             echo "BAD CONNECTION";
-        }
+        }*/
 		
 		#SQL FOR PRINTING INCIDENT TABLE
 		$sql1 = "SELECT * FROM incidents where incident_id = $num";
@@ -61,7 +61,7 @@
 		#CASE WHERE INCIDENT DOES NOT EXIST
 		else if(pg_num_rows($result) == 0)
 		{
-			echo "No int found.";
+			echo "No incident found.";
 		}
 		#PRINTS THE INCIDENT TABLE
 		else
@@ -84,7 +84,7 @@
 			
 		}
 			
-		echo "Was closure successful:" . pg_close($db);
+		#echo "Was closure successful:" . pg_close($db);
 	}
 	?>
 	

@@ -20,6 +20,8 @@
             <input type=submit>
         </form>
         
+        <p>Not a member?  <a href="signup.php">Sign up!</a></p>
+        
         <?php
         //using sessions to provide security
         session_start();
@@ -55,6 +57,6 @@
 
         
         ?>
-   <script src="loginScript.js"></script>
+   <script src="psswdScript.js"></script>
     </body>
 </html>

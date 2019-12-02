@@ -26,14 +26,14 @@
     
         $db = pg_connect("dbname=f19gsefpg1");
         
-        $status = pg_connection_status($db);
+       /* $status = pg_connection_status($db);
         
         if ($status === PGSQL_CONNECTION_OK){
             echo "GOOD CONNECTION";
         }
         else{
             echo "BAD CONNECTION";
-        }
+        }*/
 		
 		#SQL FOR PRINTING INCIDENT TABLE
 		$sql1 = "SELECT * FROM incidents where state = 'open'";
@@ -75,7 +75,7 @@
 			
 		}
 			
-		echo "Was closure successful:" . pg_close($db);
+		#echo "Was closure successful:" . #pg_close($db);
 	
 	?>
    
