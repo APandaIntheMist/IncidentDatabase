@@ -4,17 +4,8 @@
     </head>
     <body>
 	   <h1>
-	   Issue Tracking System
+	   Open Incidents
 	   </h1>
-        <h4>
-            Open Incidents
-        </h4>
-        
-        <a href="newIncident.php">New Incidents</a>
-        <a href="login.php">Login</a>
-        <a href="openincidents.php">OpenList</a>
-	    <a href="search.php">Search</a>
-        <a href="logout.php">Logout</a>
         
         <?php
         
@@ -26,20 +17,28 @@
             header("location: login.php");
             exit;
         }
+        else
+        {
+            echo "Welcome, " . $_SESSION['username'] . "<br>";
+        }
+        
+        ?>
+        
+        <a href="userHome.php">Home</a>
+        <a href="newIncident.php">New Incidents</a>
+        <a href="logout.php">Logout</a>
+        
+        
+        
+        <?php
     
         $db = pg_connect("dbname=f19gsefpg1");
         
-       /* $status = pg_connection_status($db);
+        $NAME = $_SESSION["username"];
         
-        if ($status === PGSQL_CONNECTION_OK){
-            echo "GOOD CONNECTION";
-        }
-        else{
-            echo "BAD CONNECTION";
-        }*/
 		
 		#SQL FOR PRINTING INCIDENT TABLE
-		$sql1 = "SELECT * FROM incidents where state = 'open'";
+		$sql1 = "SELECT * FROM incidents where state = 'open' and client = '$NAME'";
 		
 		
 		
@@ -55,7 +54,7 @@
 		#CASE WHERE INCIDENT DOES NOT EXIST
 		else if(pg_num_rows($result) == 0)
 		{
-			echo "No int found.";
+			echo "<br><br>No issues found.";
 		}
 		#PRINTS THE INCIDENT TABLE
 		else

@@ -3,14 +3,9 @@
 	<title>Issue Tracking System</title>
 </head>
 <body>
-	<h1> New Incidents </h1>
-	<a href="testing.php">Home</a>
-    <a href="logout.php">Logout</a>
-	<!--ADD A NEW INCIDENT CODE-->
-	<form>
-	<h4>Add New Incident</h4> 
+	<h1> Issue Tracking System </h1>
     
-    <?php
+        <?php
         session_start();
     
         // Check if the user is logged in, if not then redirect him to login page
@@ -19,11 +14,33 @@
             header("location: login.php");
             exit;
         }
-    ?>
+        else
+        {
+            echo "Welcome, " . $_SESSION['username'] . "<br>";
+        }
+
+                //if we are a user, go to user home
+	            if ($_SESSION["admin"] == 0)
+                {
+                    echo "<a href='userHome.php'>Home</a>";
+                }
+                else
+                {
+                    // go to admin home
+                    echo "<a href='testing.php'>Home</a>";
+                }
+    
+        ?>
+    <a href="logout.php">Logout</a>
+	<form>
+	<h4>Add New Incident</h4> 
+    
+
+
 	
 	<!--Text boxes to fill out-->
-	Incident Number: <br>
-	<input type = "text" name = "NUM" multiple><br>
+	<!--Incident Number: <br>
+	<input type = "text" name = "NUM" multiple><br>-->
 	
 	Category: <br>
 	<select name = "CAT">
@@ -47,21 +64,9 @@
         pg_close($db);
         ?>
     </select><br>
-        
-    Status of Incident (Optional): <br>
-	<select name = "STATUS">
-        <option value="open">Open</option>
-        <option value="closed">Closed</option>
-    </select><br><br>
 	
 	Date Of Incident (format: YYYY-MM-DD): <br>
 	<input type = "text" name = "DATE" multiple><br>
-        
-    Date Resolved(Optional) (format: YYYY-MM-DD): <br>
-	<input type = "text" name = "RESOLVED" multiple><br>
-        
-    User: <br>
-    <input type = "text" name = "USER" multiple> <br><br>
         
     Enter three tags: <br>
     <input type = "text" name = "TAG1" multiple> <br>
@@ -77,42 +82,22 @@
     <br>
 	<input type = "submit">
 	</form>
-	
-    <!--***TO DO: CHANGE PHP-->
-    
     
     
 	<?php
 		##Stores the variables from user inputs
-		if(isset($_REQUEST['NUM']))
-		{
-			$NUM=$_REQUEST['NUM'];
-		}
 		
 		if(isset($_REQUEST['CAT']))
 		{
 			$CAT=$_REQUEST['CAT'];
 		}
     
-		if(isset($_REQUEST['STATUS']))
-		{
-			$STATUS=$_REQUEST['STATUS'];
-		}
 		
 		if(isset($_REQUEST['DATE']))
 		{
 			$DATE=$_REQUEST['DATE'];
 		}
-    
-        if(isset($_REQUEST['RESOLVED']))
-		{
-			$RESOLVED=$_REQUEST['RESOLVED'];
-		}
-    
-        if(isset($_REQUEST['USER']))
-		{
-			$USER=$_REQUEST['USER'];
-		}
+
     
         if(isset($_REQUEST['TAG1']))
 		{
@@ -141,14 +126,39 @@
 		}
     
 		## adds the incident if filled out correctly, otherwise gives an error
-		if(isset($_REQUEST['NUM']) && isset($_REQUEST['CAT']) &&isset($_REQUEST['DATE']) && isset($_REQUEST['RESOLVED']) &&isset($_REQUEST['TAG1']) && isset($_REQUEST['TAG2']) &&isset($_REQUEST['TAG3']) && isset($_REQUEST['EMPLOYEE'])
-        &&isset($_REQUEST['DESCRIPTION']) && isset($_REQUEST['STATUS']))
+		if(isset($_REQUEST['CAT']) &&isset($_REQUEST['DATE']) &&isset($_REQUEST['TAG1']) && isset($_REQUEST['TAG2']) &&isset($_REQUEST['TAG3']) && isset($_REQUEST['EMPLOYEE'])
+        &&isset($_REQUEST['DESCRIPTION']))
 		{ 
-            
+            //concatenate all tags into one string for storage
             $TAGS = "\"" . $TAG1 . "\", " . "\"" . $TAG2 . "\", " . "\"" . $TAG3 . "\"";
+            $USER = $_SESSION["username"];
+            
+            //parse tags and description for apostrophes and prevent them from causing error
+            $parseTags = str_split($TAGS);
+            $parseDesc = str_split($DESCRIPTION);
+            $lenTags = strlen($TAGS);
+            $lenDesc = strlen($DESCRIPTION);
+            $insertString = "'";
+            for ($i = 0; $i < $lenDesc; $i++)
+            {
+                if ($DESCRIPTION[$i] == '\'')
+                {
+                    $DESCRIPTION = substr_replace($DESCRIPTION, $insertString, $i, 0);
+                    break;
+                }
+            }
+            
+            for ($i = 0; $i < $lenTags; $i++)
+            {
+                if ($TAGS[$i] == '\'')
+                {
+                    $TAGS = substr_replace($TAGS, $insertString, $i, 0);
+                    break;
+                }
+            }
             
 			$db = pg_connect("dbname=f19gsefpg1");
-			$sql = "INSERT INTO incidents (incident_id, category, description, date_created, date_resolved, state, client, tags, employee_id, case_history) VALUES ('$NUM', '$CAT', '$DESCRIPTION', '$DATE', '$RESOLVED', '$STATUS', '$USER', '$TAGS', '$EMPLOYEE', 'ASK ABOUT CASE HISTORY');";
+			$sql = "INSERT INTO incidents (category, description, date_created, state, client, tags, employee_id, case_history) VALUES ('$CAT', '$DESCRIPTION', '$DATE', 'open', '$USER', '$TAGS', '$EMPLOYEE', '*Ticket created on $DATE.');";
 			if (pg_query($db,$sql) != FALSE)
 			{
 				echo "New record created successfully";

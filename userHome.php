@@ -7,7 +7,6 @@
 	<h1>
 	Issue Tracking System
 	</h1>
-    
     <?php
     session_start();
     
@@ -19,16 +18,17 @@
     }
     else
     {
-        echo "Welcome, ". $_SESSION['username'] . "<br>";
+        echo "Welcome, " . $_SESSION['username'] . "<br>";
     }
     
-    ?>
+	
+	?>
     <a href="newIncident.php">New Incidents</a>
-    <a href="login.php">Login</a>
-    <a href="openincidents.php">OpenList</a>
-	<a href="search.php">Search & Edit</a>
-    <a href="newCat.php">Create Category</a>
+    <a href="usersIncidents.php">Open Issues</a>
     <a href="logout.php">Logout</a>
+	
+	<!--THIS PHP BLOCK PRINTS ALL FOUR TABLES-->
+	
 	
 </body>
 </html>

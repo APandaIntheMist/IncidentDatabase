@@ -7,9 +7,12 @@
        
     </head>
     <body>
-	   <h1>
+       <h1>
+       Issue Tracking System
+       </h1>
+	   <h2>
 	   Login
-	   </h1>
+	   </h2>
     
         <form>
             <h3>Username</h3>
@@ -47,8 +50,21 @@
               {
                   //tell session user is logged in
                 $_SESSION["loggedin"] = true;
-                header("Location: testing.php");
-                exit;
+                $_SESSION["username"] = pg_fetch_result($result,0,0);
+                
+                
+                if (pg_fetch_result($result,0,3) == 0)
+                {
+                    $_SESSION["admin"] = 0;
+                    header("Location: userHome.php");
+                    exit;
+                }
+                else
+                {
+                    $_SESSION["admin"] = 1;
+                    header("Location: testing.php");
+                    exit;
+                }
               }
 		  }
 		
